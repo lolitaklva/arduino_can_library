@@ -1,9 +1,9 @@
 # Library usage
 ## Library Installation
 ---
-1.Download the ZIP file from https://github.com/lolitaklva/arduino_can_library/tree/main -> Code -> Download ZIP
-2.From the Arduino IDE: Sketch -> Include Library... -> Add .ZIP Library...
-3.Restart the Arduino IDE
+1.Download the ZIP file from https://github.com/lolitaklva/arduino_can_library/tree/main -> Code -> Download ZIP  
+2.From the Arduino IDE: Sketch -> Include Library... -> Add .ZIP Library...  
+3.Restart the Arduino IDE  
 ## Init CAN  
 ---
 To send or read a CAN message, create a CAN instance. Then, include the created instance as the first argument in the init() function. Additionally, provide the TX and RX pin numbers and the baud rate as the second, third, and fourth arguments, respectively.
