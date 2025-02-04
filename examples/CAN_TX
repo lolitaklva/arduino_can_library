@@ -1,0 +1,15 @@
+#include <IncFile1.h>
+
+CAN can_tx;
+
+#define RX 4
+#define TX 5
+
+void setup() {
+  can_tx.init(can_tx, RX, TX, 100);
+}
+
+void loop() {
+  can_tx.sendPacket(0b00001000110, false, 0b00110101);
+  delay(10000);
+}
