@@ -1,6 +1,7 @@
-Write CAN
-To send or read CAN message create CAN instance. Then include the created instance as the first argument using init() function. Also provide TX and RX pin number and baudrate as second, third and fourth arguments respectively.
-Example of initialization:
+# Init CAN  
+---
+To send or read a CAN message, create a CAN instance. Then, include the created instance as the first argument in the init() function. Additionally, provide the TX and RX pin numbers and the baud rate as the second, third, and fourth arguments, respectively.
+### Example of Initialization
 ```cpp
 CAN can_tx;
 #define RX 4
