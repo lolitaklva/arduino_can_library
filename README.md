@@ -18,3 +18,17 @@ To write a CAN message, use sendPacket() function. Provide the message id, set r
 ```cpp
 can_tx.sendPacket(0b00001000110, false, 0b00110101);
 ```
+## Read CAN  
+---
+To read a CAN message, use readPacket() function. You can additionally read any part of the CAN frame structure by using the following functions: get_id(); get_rtr(); get_ide(); get_dlc(); get_data(); get_crc_transmit(); get_crc_receive(); get_ack().
+### Example 
+```cpp
+void loop() {
+  can_rx.readPacket();
+
+  if(can_rx.Complete_RX()) {
+      uint8_t r_data = can_rx.get_data();
+  }
+  delay(2000);
+}
+```
