@@ -32,3 +32,19 @@ void loop() {
   delay(2000);
 }
 ```
+## CAN frame structure
+---
+Library uses standard frame format with 11-bit idemtifier and 8-bit data length.
+```cpp
+can_frame = ((uint64_t)_identifier << 0);
+can_frame |= ((uint64_t)_rtr << 11);
+can_frame |= ((uint64_t)_ide << 12);
+can_frame |= ((uint64_t)_dlc << 13);
+can_frame |= ((uint64_t)_data << 17);
+can_frame |= ((uint64_t)_crc << 25);
+can_frame |= ((uint64_t)_crc_del << 40);
+can_frame |= ((uint64_t)_ack << 41);
+can_frame |= ((uint64_t)_ack_del << 42);
+can_frame |= ((uint64_t)_eof << 43);
+can_frame |= ((uint64_t)_ifs << 50);
+```
