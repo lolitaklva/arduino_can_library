@@ -11,3 +11,10 @@ void setup() {
   can_tx.init(can_tx, RX, TX, 100);
 }
 ```
+## Write CAN  
+---
+To write a CAN message, use sendPacket() function. Provide the message id, set rtr to false and pass the data as arguments.
+### Example
+```cpp
+can_tx.sendPacket(0b00001000110, false, 0b00110101);
+```
