@@ -1,6 +1,13 @@
 # Arduino CAN Interface library
 ---
-The CAN (Controller Area Network) interface is a robust communication protocol that uses differential signal (CAN_H and CAN_L), which makes it highly resistant to electromagnetic interference (EMI) and noise, ensuring reliable data transmission even in harsh environments. CAN communication is considered "democratic" since the CAN bus is a broadcast type of bus. This means that all nodes can “hear” all transmissions, and each node can also send messages. This library implements V2.0A at up to 1 Mb/s, with 11-bit Identifiers only.
+The CAN (Controller Area Network) interface is a robust communication protocol that uses differential signal (CAN_H and CAN_L), which makes it highly resistant to electromagnetic interference (EMI) and noise, ensuring reliable data transmission even in harsh environments. CAN communication is considered "democratic" since the CAN bus is a broadcast type of bus. This means that all nodes can “hear” all transmissions, and each node can also send messages. 
+This library implements:
+- V2.0A at up to 1 Mb/s;
+- 11-bit Identifiers only;
+- Static id allocation;
+- User-defined baud rate;
+- Message arbitration;
+- Automatic error handling;
 # Hardware:
 ---
 You can use this library with either one or two Arduino boards together with two MAX485 modules, wired up as shown:
