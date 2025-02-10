@@ -1,3 +1,7 @@
+# Hardware:
+---
+You can use this library with either one or two Arduino boards together with two MAX485 modules, wired up as shown:
+![Wiring diagram](images/Arduino_MAX485.png)
 # Library usage
 ## Library Installation
 ---
