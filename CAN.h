@@ -12,6 +12,9 @@ class CAN {
 	
 	void init(CAN& can_obj, uint8_t RX, uint8_t TX, uint32_t baud_rate);
 	uint8_t sendPacket(uint16_t id, _Bool rtr, uint8_t data);
+	// uint8_t beginExtendedPacket(long id, int dlc = -1, _Bool rtr = false);
+	// void endPacket(); 
+	// uint8_t requestPacket(uint8_t id, _Bool rtr = true);
 	uint8_t readPacket();
 	
 	uint16_t get_id();
@@ -83,11 +86,15 @@ class CAN {
 	_Bool tx_buss_off_flag = false;
 	_Bool rx_buss_off_flag = false;
 	
+	// ACK check
+	_Bool ack_check = false;
+	_Bool ack_check_bit = 1;
+	
 	// RX Complete
 	_Bool rx_complete = false;
 	
-	uint8_t tx_error_counter = 0;
-	uint8_t rx_error_counter = 0;
+	uint16_t tx_error_counter = 0;
+	uint16_t rx_error_counter = 0;
 	
 	void error_frame();
 		
