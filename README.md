@@ -11,7 +11,7 @@ This library implements:
 # Hardware:
 ---
 You can use this library with either one or two Arduino boards together with any two CAN transceivers modules (for example, TJA1050), wired up as shown:
-![Wiring diagram](images/ArduinoUno_TJA1050.png)
+![Wiring diagram](images/ArduinoUno_TJA1050.jpg)
 # Library usage
 ## Library Installation
 ---
