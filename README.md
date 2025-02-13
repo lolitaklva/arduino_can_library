@@ -10,8 +10,8 @@ This library implements:
 - Automatic error handling;
 # Hardware:
 ---
-You can use this library with either one or two Arduino boards together with two MAX485 modules, wired up as shown:
-![Wiring diagram](images/Arduino_MAX485.png)
+You can use this library with either one or two Arduino boards together with any two CAN transceivers modules (for example, TJA1050), wired up as shown:
+![Wiring diagram](images/ArduinoUno_TJA1050.png)
 # Library usage
 ## Library Installation
 ---
