@@ -74,3 +74,6 @@ The RX clock is synchronized with the TX clock on every transmission of a bit wi
 ## Error handling
 ---
 The library implements a complex and reliable error-handling algorithm. There are six error flags with corresponding error-handling logic that accounts for the complexity of the CAN frame structure. Each node maintains two error counters: the Transmit Error Counter and the Receive Error Counter. Depending on its error history, a node can be error-active, error-passive (to avoid actively disrupting bus traffic), or in a 'bus-off' state, meaning it no longer participates in bus communication. A global error flag is set whenever any of the six possible errors are detected, ensuring that every node on the bus is aware of the issue and can react to it appropriately.
+## Future enhancements
+---
+Currently, the library doesn`t implement extended frames and remote requests (rtr=false). However, these functionalities will be added in upcoming versions, along with dynamic ID allocation and other automation algorithms.
