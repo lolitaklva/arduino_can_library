@@ -27,6 +27,7 @@ class CAN {
 	_Bool get_ack();
 	
 	_Bool Complete_RX();
+	_Bool Complete_TX();
 	
 	void TIMER_A_vect();
 	void TIMER_B_vect();
@@ -90,8 +91,9 @@ class CAN {
 	_Bool ack_check = false;
 	_Bool ack_check_bit = 1;
 	
-	// RX Complete
+	// RX and TX Complete
 	_Bool rx_complete = false;
+	_Bool tx_complete = false;
 	
 	uint16_t tx_error_counter = 0;
 	uint16_t rx_error_counter = 0;
