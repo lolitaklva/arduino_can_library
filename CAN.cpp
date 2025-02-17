@@ -6,6 +6,11 @@
   
  #include "IncFile1.h"
 
+ // remote request
+ // extended frame
+ // dynamic data length from 1 to 8 bytes
+ // check for maximum data length 
+ 
  CAN* CAN::instance = NULL;
  
  void CAN::init(CAN& can_obj, uint8_t RX, uint8_t TX, uint32_t baud_rate) {
@@ -20,6 +25,7 @@
 	 UCSR0B &= ~(1 << RXEN0);
 	 
 	 instance = &can_obj;
+	 
 	 TX_pin = TX;
 	 RX_pin = RX;
 	 
@@ -74,8 +80,11 @@
 	 }
 	 
 	 // init timer 
-	 TCCR1B |= (1 << WGM12);  // CTC mode timer1 with OCR1A used as TOP value
+	 TCCR1A = 0;
+	 TCCR1C = 0;
+	 TCCR1B = (1 << WGM12);  // CTC mode timer1 with OCR1A used as TOP value
 	 TCCR1B |= (1 << CS11) | (1 << CS10);   // 64 prescaler divider 
+	 TCNT1 = 0;
 	 
 	 if (baud_rate == 0) {
 		 return;
@@ -88,7 +97,7 @@
 	 //	set OCR1B value
 	 OCR1B = (float)(OCR1A) * 0.75;  // 75 % for bit sampling
 	 
-	 TIFR1 |= (1 << OCF1A); // flag reset 
+	 TIFR1 = (1 << OCF1A); // flag reset 
 	 
 	 sei(); // enable global interrupt
 	 
@@ -151,10 +160,11 @@
 	 can_frame |= ((uint64_t)_ack_del << 42);
 	 can_frame |= ((uint64_t)_eof << 43);
 	 can_frame |= ((uint64_t)_ifs << 50);
- 
-	 TIMSK1 |= 1 << OCIE1A;  // enable interrupt on compare match
+	 
+	 TIMSK1 = 1 << OCIE1A;  // enable interrupt on compare match
 	 TIMSK1 &= ~(1 << OCIE1B);  // disable receiver interrupt 
 	 ISR_dir = true; // transmitting
+	 tx_complete = false;
 	 
 	 return 0;
  }
@@ -169,17 +179,19 @@
  // Interrupts vectors
  ISR(TIMER1_COMPA_vect)  { CAN::instance->TIMER_A_vect(); }
  ISR(TIMER1_COMPB_vect)  { CAN::instance->TIMER_B_vect(); }
- ISR(PCINT0_vect)        { CAN::instance->PCINT_vect(); }
- ISR(PCINT1_vect)        { CAN::instance->PCINT_vect(); }
+ //ISR(PCINT0_vect)        { CAN::instance->PCINT_vect(); }
+ //ISR(PCINT1_vect)        { CAN::instance->PCINT_vect(); }
  ISR(PCINT2_vect)        { CAN::instance->PCINT_vect(); }
  
  void CAN::TIMER_A_vect() {
 	 if (!global_error_flag) {
-		 if (ISR_dir && !tx_buss_off_flag) {
-			 ISR_Transmit();
-		 }
-	 }
+		  if (ISR_dir && !tx_buss_off_flag) {
+			  ISR_Transmit();
+		  }
+	  }
+ 
 	 error_frame();
+ 
  }
  
  void CAN::TIMER_B_vect() {
@@ -201,14 +213,14 @@
  }
  
  void CAN::PCINT_vect() {
-	 if(PCMSK0 & (1 << pin_def_rx)) {
-		 TCNT1 = 0; // synchronize receiver clock with transmitter clock 		
-	 }
-	 if(PCMSK1 & (1 << pin_def_rx)) {
-		 TCNT1 = 0; // synchronize receiver clock with transmitter clock
-	 }
+	 //if(PCMSK0 & (1 << pin_def_rx)) {
+	 //	TCNT1 = 0; // synchronize receiver clock with transmitter clock 		
+	 //}
+	 //if(PCMSK1 & (1 << pin_def_rx)) {
+	 //	TCNT1 = 0; // synchronize receiver clock with transmitter clock
+	 //}
 	 if(PCMSK2 & (1 << pin_def_rx)) {
-		 TCNT1 = 0; // synchronize receiver clock with transmitter clock
+		 //TCNT1 = 0; // synchronize receiver clock with transmitter clock
 	 }
  }
  
@@ -306,7 +318,7 @@
 					 return;
 				 }
 				 if (shift == 41) {
-					 ack_check = true;
+					 ack_check = true; // ACK sampling at 75% of a clock cycle
 					 TIMSK1 |= 1 << OCIE1B; 
 				 }
 				 if (ack_check_bit == 1 && shift == 42) { // check for the ACK bit on the next interrupt
@@ -320,6 +332,7 @@
 		 }
 		 else {
 			 if (tx_error_counter >= 8) tx_error_counter -= 8;
+			 tx_complete = true;
 			 transmitting = false;  // end transmission
 			 count_recessive = 0;
 			 readPacket(); // if not transmitting, then receiving
@@ -425,6 +438,7 @@
 				 _ack_del_r = (_Bool) ((can_frame_r >> 42) & 1);
 				 _eof_r = (uint8_t)((can_frame_r >> 43) & 0x7F);
 				 can_frame_r = 0;
+				 
 				 // CRC check
 				 _crc_r = CRC(_data_r);
 				 
@@ -483,6 +497,10 @@
  
  _Bool CAN::Complete_RX() {
 	 return rx_complete;
+ }
+ 
+ _Bool CAN::Complete_TX() {
+	 return tx_complete;
  }
  
  void CAN::error_frame() {
